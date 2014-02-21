@@ -1,0 +1,29 @@
+--LogAPI by : RamiLego--
+--Doc--
+
+--Vars--
+
+--Functions--
+function add(sElevel,sInfo,sDir)
+	if sElevel == nil or sInfo == nil or sDir == nil then return error("No Full Info For Log") end
+	local nTime = os.time()
+	log = fs.open(sDir,"a")
+	log.writeLine("["..nTime.."  "..sElevel.."]: "..sInfo)
+	log.flush()
+	log.close()
+end
+
+function bestname( sName , sDir )
+	if sName == nil or sDir == nil then return error("No Full Info For Best Log Name") end
+	files = fs.list( sDir )
+	nF = #files
+	return sName.."#"..tostring(nF)
+end
+
+--Loading--
+if term.isColor() then
+	term.setTextColor(colors.green)
+end
+print("LogAPI by RamiLego Loaded")
+--Test--
+--add("Info","Just Test","/LogTest")
