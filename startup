@@ -1,0 +1,4 @@
+--Loading APIs--
+os.loadAPI("/log")
+
+shell.run("/CCR/CCR.lua")
