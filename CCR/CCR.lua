@@ -535,7 +535,7 @@ local function launch()
 	InterFace.drawBar()
 	gRender("start")
 	
-	local NExit = ture
+	local NExit = true
 	if aExits == 0 then
 		NExit = false
 	end
