@@ -3,6 +3,11 @@
 shell.run("clear")
 term.setTextColor(colors.white)
 local homeD = "/CCR/"
+
+if not fs.exists(homeD.."Logs/") then
+	fs.makeDir(homeD.."Logs/")
+end
+
 local logn = homeD.."Logs/" .. log.bestname("Log",homeD.."Logs/")
 local TermW,TermH = term.getSize()
 
@@ -509,6 +514,7 @@ function InterFace.render()
 			local erobj = tostring(tScreen[p2][p3-1].robot)
 			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true then
 				addWall(p2,p3-1)
+				drawMap()
 			end
 		end
 	elseif id == "timer" then
@@ -526,30 +532,21 @@ local function launch()
 	end
 	local create = true
 	drawMap()
-	--while true do
-		--local id,p1 = os.pullEventRaw()
-	--	gRender(create)
-	--	if aExits == 0 then
-	--		log.add("Exits",aExits,logn)
-	--		break
-	--	end
-	--	create = false
-		--[[if id == "key" then
-			if p1 == 211 then
-				break
-			end
-		end]]--
-	--	sleep(1)
-	--end
 	InterFace.drawBar()
 	gRender("start")
+	
+	local NExit = ture
+	if aExits == 0 then
+		NExit = false
+	end
+	
 	while true do
 		InterFace.drawBar()
 		local isExit = InterFace.render()
 		if isExit == "end" or fExit == "yes" then
 			break
 		end
-		if aExits == 0 then
+		if aExits == 0 and NExit == true then
 			fExit = "yes"
 		end
 	end
