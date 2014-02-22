@@ -8,7 +8,13 @@ local TermW,TermH = term.getSize()
 
 local tScreen = {}
 local oScreen = {}
+local InterFace = {}
 local aExits = 0
+local fExit = "nop"
+
+InterFace.cBar = colors.orange
+InterFace.cExit = colors.red
+InterFace.cBarText = colors.gray
 
 local cG = colors.lightGray
 local cW = colors.gray
@@ -22,6 +28,13 @@ local tArgs = { ... }
 
 log.add("Info","Vars Section Done",logn)
 --Functions--
+local function printCentred( yc, stg )
+	local xc = math.floor((TermW - string.len(stg)) / 2)
+	term.setCursorPos(xc,yc)
+	--term.clearLine()
+	term.write( stg )
+end
+
 local function reMap()
 	log.add("Info","Screen Clearing Started",logn)
 	tScreen = nil
@@ -311,7 +324,7 @@ end
 
 local function gRender(bFirst)
 	drawMap()
-	if bFirst then
+	if bFirst == "start" then
 		log.add("Info","Create Instate of Render",logn)
 		for x=1,TermW do
 			for y=1,TermH-1 do
@@ -471,9 +484,41 @@ local function gRender(bFirst)
 	end
 end
 
+function InterFace.drawBar()
+	term.setTextColor(InterFace.cBarText)
+	paintutils.drawLine( 1, 1, TermW-1, 1, InterFace.cBar)
+	printCentred( 1, "CCRedirection" )
+	term.setBackgroundColor(InterFace.cExit)
+	term.setCursorPos(TermW,1)
+	write("X")
+	term.setBackgroundColor(colors.black)
+end
+
+function InterFace.render()
+	os.startTimer(1)
+	local id,p1,p2,p3 = os.pullEvent()
+	log.add("Event",id,logn)
+	if id == "mouse_click" then
+		if p3 == 1 then
+			if p2 == TermW then
+				return "end"
+			end
+		else
+			--local eobj = tScreen[p2][p3]
+			local eobj = tScreen[p2][p3-1]
+			local erobj = tostring(tScreen[p2][p3-1].robot)
+			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true then
+				addWall(p2,p3-1)
+			end
+		end
+	elseif id == "timer" then
+		gRender("nop")
+	end
+end
+
 log.add("Info","Functions Section Done",logn)
 --Launcher--
-function launch()
+local function launch()
 	if #tArgs > 0 then
 		loadLevel(tArgs[1])
 	else
@@ -481,20 +526,32 @@ function launch()
 	end
 	local create = true
 	drawMap()
-	while true do
+	--while true do
 		--local id,p1 = os.pullEventRaw()
-		gRender(create)
-		if aExits == 0 then
-			log.add("Exits",aExits,logn)
-			break
-		end
-		create = false
+	--	gRender(create)
+	--	if aExits == 0 then
+	--		log.add("Exits",aExits,logn)
+	--		break
+	--	end
+	--	create = false
 		--[[if id == "key" then
 			if p1 == 211 then
 				break
 			end
 		end]]--
-		sleep(1)
+	--	sleep(1)
+	--end
+	InterFace.drawBar()
+	gRender("start")
+	while true do
+		InterFace.drawBar()
+		local isExit = InterFace.render()
+		if isExit == "end" or fExit == "yes" then
+			break
+		end
+		if aExits == 0 then
+			fExit = "yes"
+		end
 	end
 	log.add("Info","End Of Game",logn)
 end
