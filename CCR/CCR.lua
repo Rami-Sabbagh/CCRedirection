@@ -1,4 +1,4 @@
---CCRedirection by : RamiLego--
+--CCRedirection by : RamiLego4Game--
 --Vars--
 shell.run("clear")
 term.setTextColor(colors.white)
