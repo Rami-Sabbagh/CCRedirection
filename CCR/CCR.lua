@@ -27,12 +27,9 @@ local function reMap()
 	tScreen = nil
 	tScreen = {}
 	for x=1,TermW do
-		--log.add("tScreen-Info","For X = " .. tostring(x),logn)
 		tScreen[x] = {}
 		for y=1,TermH-1 do
-			--log.add("tScreen-Info","For Y = "..tostring(y),logn)
 			tScreen[x][y] = { space = true, wall = false, ground = false, robot = "zz", start = "zz", exit = "zz" }
-			--log.add("tScreen-Info","ground = "..tostring(tScreen[x][y].ground),logn)
 		end
 	end
 	log.add("Info","Screen Clearing Done",logn)
@@ -51,12 +48,9 @@ local function buMap()
 	oScreen = nil
 	oScreen = {}
 	for x=1,TermW do
-		--log.add("tScreen-Info","For X = " .. tostring(x),logn)
 		oScreen[x] = {}
 		for y=1,TermH-1 do
-			--log.add("tScreen-Info","For Y = "..tostring(y),logn)
 			oScreen[x][y] = tablecopy(tScreen[x][y])
-			--log.add("tScreen-Info","ground = "..tostring(tScreen[x][y].ground),logn)
 		end
 	end
 	log.add("Info","Screen Backup Done",logn)
@@ -65,7 +59,6 @@ end
 local function addRobot(x,y,side,color)
 	local obj = tScreen[x][y]
 	local data = side..color
-	--log.add("Info RD",data,logn)
 	if obj.wall == nil and obj.robot == nil then
 		tScreen[x][y].robot = data
 	else
@@ -78,7 +71,6 @@ end
 local function addStart(x,y,side,color)
 	local obj = tScreen[x][y]
 	local data = side..color
-	--log.add("Info SD",data,logn)
 	if obj.wall == nil and obj.space == nil then
 		tScreen[x][y].start = data
 	else
@@ -246,7 +238,6 @@ local function drawMap()
 		 
 		 local st = tostring(tScreen[x][y].start)
 			if not(st == "zz" or st == "nil") then
-				--log.add("Info S",st,logn)
 				local Cr = string.sub(st,2,2)
 				if Cr == "a" then
 					Cr = cR1
@@ -285,7 +276,6 @@ local function drawMap()
 			
 			local rb = tostring(tScreen[x][y].robot)
 			if not(rb == "zz" or rb == "nil") then
-				--log.add("Info R",rb,logn)
 				local Cr = string.sub(rb,2,2)
 				if Cr == "a" then
 					Cr = cR1
@@ -296,8 +286,7 @@ local function drawMap()
 				elseif Cr == "d" then
 					Cr = cR4
 				else
-					log.add("Error",rb..Cr,logn)
-					return error("Robot Color Out")
+					Cr = colors.white
 				end
 				term.setBackgroundColor(Cr)
 				term.setTextColor(colors.white)
@@ -334,14 +323,13 @@ local function gRender(bFirst)
 				end
 			end
 		end
+		log.add("Info","Create End",logn)
 	else
 		buMap()
 		for x=1,TermW do
 			for y=1,TermH-1 do
-				--local obj = oScreen[x][y]
 				local rb = tostring(oScreen[x][y].robot)
 				if not(rb == "zz" or rb == "nil") then
-					log.add("Important","X = "..x.." Y = "..y.." RB = "..rb,logn)
 					local Cr = string.sub(rb,2,2)
 					local sSide = string.sub(rb,1,1)
 					local sobj = oScreen[x][y]
@@ -351,26 +339,33 @@ local function gRender(bFirst)
 							addRobot(x,y,"g",Cr)
 						end
 					elseif sobj.exit == Cr then
+						if sSide == "a" or sSide == "b" or sSide == "c" or sSide == "d" then
 						tScreen[x][y].robot = "zz"
 						addRobot(x,y,"g",Cr)
 						aExits = aExits-1
 						log.add("Exit","Robot on Exit",logn)
+						end
 					elseif sSide == "a" then
 						local obj = oScreen[x][y-1]
+						local rb = tostring(oScreen[x][y-1].robot)
 						tScreen[x][y].robot = "zz"
-						if not obj.wall == true then
+						log.add("RB Colg",rb,logn)
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"c",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x,y-1,sSide,Cr)
 						else
 							local obj2 = oScreen[x-1][y]
 							local obj3 = oScreen[x+1][y]
-							--addRobot(x,y,"g",Cr)
 							if not obj2.wall == true and not obj3.wall == true then
-								--addRobot(x,y,"g",Cr)
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+								addRobot(x,y,"c",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"d",Cr)
@@ -381,20 +376,25 @@ local function gRender(bFirst)
 						end
 					elseif sSide == "b" then
 						local obj = oScreen[x+1][y]
+						local rb = tostring(oScreen[x+1][y].robot)
 						tScreen[x][y].robot = "zz"
-						if not obj.wall == true then
+						log.add("RB Colg",rb,logn)
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"d",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x+1,y,sSide,Cr)
 						else
-							--addRobot(x,y,"g",Cr)
 							local obj2 = oScreen[x][y-1]
 							local obj3 = oScreen[x][y+1]
 							if not obj2.wall == true and not obj3.wall == true then
-								--addRobot(x,y,"g",Cr)
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"a",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"c",Cr)
 								end
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+								addRobot(x,y,"d",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"a",Cr)
@@ -405,20 +405,26 @@ local function gRender(bFirst)
 						end
 					elseif sSide == "c" then
 						local obj = oScreen[x][y+1]
+						local rb = tostring(oScreen[x][y+1].robot)
 						tScreen[x][y].robot = "zz"
-						if not obj.wall == true then
+						log.add("RB Colg",rb,logn)
+						log.add("RB Colg",rb,logn)
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"a",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x,y+1,sSide,Cr)
 						else
 							local obj2 = oScreen[x-1][y]
 							local obj3 = oScreen[x+1][y]
-							--addRobot(x,y,"g",Cr)
 							if not obj2.wall == true and not obj3.wall == true then
-								--addRobot(x,y,"g",Cr)
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+								addRobot(x,y,"a",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"d",Cr)
@@ -429,20 +435,25 @@ local function gRender(bFirst)
 						end
 					elseif sSide == "d" then
 						local obj = oScreen[x-1][y]
+						local rb = tostring(oScreen[x-1][y].robot)
 						tScreen[x][y].robot = "zz"
-						if not obj.wall == true then
+						log.add("RB Colg",rb,logn)
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"b",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x-1,y,sSide,Cr)
 						else
-							--addRobot(x,y,"g",Cr)
 							local obj2 = oScreen[x][y-1]
 							local obj3 = oScreen[x][y+1]
 							if not obj2.wall == true and not obj3.wall == true then
-								--addRobot(x,y,"g",Cr)
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"c",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"a",Cr)
 								end
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+								addRobot(x,y,"b",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"a",Cr)
@@ -452,11 +463,9 @@ local function gRender(bFirst)
 							end
 						end
 					else
-						
+						addRobot(x,y,sSide,"g")
 					end
 				end
-				--drawMap()
-				--sleep(0.01)
 			end
 		end
 	end
@@ -473,17 +482,20 @@ function launch()
 	local create = true
 	drawMap()
 	while true do
-		local id,p1 = os.pullEventRaw()
+		--local id,p1 = os.pullEventRaw()
 		gRender(create)
+		if aExits == 0 then
+			log.add("Exits",aExits,logn)
+			break
+		end
 		create = false
-		if id == "key" then
+		--[[if id == "key" then
 			if p1 == 211 then
 				break
 			end
-		end
+		end]]--
+		sleep(1)
 	end
-	
-	--print(logn)
 	log.add("Info","End Of Game",logn)
 end
 
