@@ -223,7 +223,6 @@ end
 
 local function drawMap()
 	log.add("Info","Drawing Map",logn)
-	shell.run("clear")
 	for x=1,TermW do
 		for y=1,TermH-1 do
 		  
@@ -541,7 +540,6 @@ local function launch()
 	end
 	
 	while true do
-		InterFace.drawBar()
 		local isExit = InterFace.render()
 		if isExit == "end" or fExit == "yes" then
 			break
