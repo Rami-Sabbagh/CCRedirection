@@ -96,6 +96,7 @@ local function addStart(x,y,side,color)
 		obj.space = nil
 		tScreen[x][y].start = data
 	end
+	aExits = aExits+1
 end
 
 local function addGround(x,y)
@@ -124,7 +125,6 @@ local function addExit(x,y,cl)
 		obj.start = "zz"
 		tScreen[x][y].exit = cl
 	end
-	aExits = aExits+1
 end
 
 local function addWall(x,y)
