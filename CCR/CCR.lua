@@ -367,29 +367,26 @@ local function gRender(bFirst)
 						local rb = tostring(oScreen[x][y-1].robot)
 						tScreen[x][y].robot = "zz"
 						log.add("RB Colg",rb,logn)
-						if not obj.wall == true or not(rb == "zz" or rb == "nil") then
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"c",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x,y-1,sSide,Cr)
 						else
 							local obj2 = oScreen[x-1][y]
 							local obj3 = oScreen[x+1][y]
-							local rb2 = tostring(oScreen[x-1][y].robot)
-							local rb3 = tostring(oScreen[x+1][y].robot)
-							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if not obj2.wall == true and not obj3.wall == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
-							elseif (obj.wall == true and obj2.wall == true and obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb == "zz" or rb == "nil")  and not(rb3 == "zz" or rb == "nil")) then
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
 								addRobot(x,y,"c",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"d",Cr)
 								elseif obj2.wall == true then
-									addRobot(x,y,"b",Cr)
-								elseif not(rb3 == "zz" or rb == "nil") then
-									addRobot(x,y,"d",Cr)
-								elseif not(rb2 == "zz" or rb == "nil") then
 									addRobot(x,y,"b",Cr)
 								end
 							end
@@ -399,29 +396,26 @@ local function gRender(bFirst)
 						local rb = tostring(oScreen[x+1][y].robot)
 						tScreen[x][y].robot = "zz"
 						log.add("RB Colg",rb,logn)
-						if not obj.wall == true or not(rb == "zz" or rb == "nil") then
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"d",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x+1,y,sSide,Cr)
 						else
 							local obj2 = oScreen[x][y-1]
 							local obj3 = oScreen[x][y+1]
-							local rb2 = tostring(oScreen[x][y-1].robot)
-							local rb3 = tostring(oScreen[x][y+1].robot)
-							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if not obj2.wall == true and not obj3.wall == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"a",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"c",Cr)
 								end
-							elseif (obj.wall == true and obj2.wall == true and obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb == "zz" or rb == "nil")  and not(rb3 == "zz" or rb == "nil")) then
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
 								addRobot(x,y,"d",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"a",Cr)
 								elseif obj2.wall == true then
-									addRobot(x,y,"c",Cr)
-								elseif not(rb3 == "zz" or rb == "nil") then
-									addRobot(x,y,"a",Cr)
-								elseif not(rb2 == "zz" or rb == "nil") then
 									addRobot(x,y,"c",Cr)
 								end
 							end
@@ -432,29 +426,26 @@ local function gRender(bFirst)
 						tScreen[x][y].robot = "zz"
 						log.add("RB Colg",rb,logn)
 						log.add("RB Colg",rb,logn)
-						if not obj.wall == true or not(rb == "zz" or rb == "nil") then
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"a",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x,y+1,sSide,Cr)
 						else
 							local obj2 = oScreen[x-1][y]
 							local obj3 = oScreen[x+1][y]
-							local rb2 = tostring(oScreen[x-1][y].robot)
-							local rb3 = tostring(oScreen[x+1][y].robot)
-							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if not obj2.wall == true and not obj3.wall == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
-							elseif (obj.wall == true and obj2.wall == true and obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb == "zz" or rb == "nil")  and not(rb3 == "zz" or rb == "nil")) then
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
 								addRobot(x,y,"a",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"d",Cr)
 								elseif obj2.wall == true then
-									addRobot(x,y,"b",Cr)
-								elseif not(rb3 == "zz" or rb == "nil") then
-									addRobot(x,y,"d",Cr)
-								elseif not(rb2 == "zz" or rb == "nil") then
 									addRobot(x,y,"b",Cr)
 								end
 							end
@@ -464,29 +455,26 @@ local function gRender(bFirst)
 						local rb = tostring(oScreen[x-1][y].robot)
 						tScreen[x][y].robot = "zz"
 						log.add("RB Colg",rb,logn)
-						if not obj.wall == true or not(rb == "zz" or rb == "nil") then
+						if not(rb == "zz" or rb == "nil") then
+							addRobot(x,y,"b",Cr)
+							log.add("Rb Colg","Ok",logn)
+						elseif not obj.wall == true then
 							addRobot(x-1,y,sSide,Cr)
 						else
 							local obj2 = oScreen[x][y-1]
 							local obj3 = oScreen[x][y+1]
-							local rb2 = tostring(oScreen[x][y-1].robot)
-							local rb3 = tostring(oScreen[x][y+1].robot)
-							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if not obj2.wall == true and not obj3.wall == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"c",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"a",Cr)
 								end
-							elseif (obj.wall == true and obj2.wall == true and obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb == "zz" or rb == "nil")  and not(rb3 == "zz" or rb == "nil")) then
+							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
 								addRobot(x,y,"b",Cr)
 							else
 								if obj3.wall == true then
 									addRobot(x,y,"a",Cr)
 								elseif obj2.wall == true then
-									addRobot(x,y,"c",Cr)
-								elseif not(rb3 == "zz" or rb == "nil") then
-									addRobot(x,y,"a",Cr)
-								elseif not(rb2 == "zz" or rb == "nil") then
 									addRobot(x,y,"c",Cr)
 								end
 							end
