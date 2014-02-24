@@ -374,7 +374,7 @@ local function gRender(bFirst)
 							local obj3 = oScreen[x+1][y]
 							local rb2 = tostring(oScreen[x-1][y].robot)
 							local rb3 = tostring(oScreen[x+1][y].robot)
-							if not( obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
@@ -406,7 +406,7 @@ local function gRender(bFirst)
 							local obj3 = oScreen[x][y+1]
 							local rb2 = tostring(oScreen[x][y-1].robot)
 							local rb3 = tostring(oScreen[x][y+1].robot)
-							if not( obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"a",Cr)
 								elseif Cr == "b" or Cr == "d" then
@@ -439,7 +439,7 @@ local function gRender(bFirst)
 							local obj3 = oScreen[x+1][y]
 							local rb2 = tostring(oScreen[x-1][y].robot)
 							local rb3 = tostring(oScreen[x+1][y].robot)
-							if not( obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
@@ -471,7 +471,7 @@ local function gRender(bFirst)
 							local obj3 = oScreen[x][y+1]
 							local rb2 = tostring(oScreen[x][y-1].robot)
 							local rb3 = tostring(oScreen[x][y+1].robot)
-							if not( obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
+							if (not obj2.wall == true and not obj3.wall == true) or (not(rb2 == "zz" or rb == "nil") and not(rb3 == "zz" or rb == "nil")) then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"c",Cr)
 								elseif Cr == "b" or Cr == "d" then
