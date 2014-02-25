@@ -499,7 +499,6 @@ function InterFace.drawBar()
 end
 
 function InterFace.render()
-	os.startTimer(1)
 	local id,p1,p2,p3 = os.pullEvent()
 	log.add("Event",id,logn)
 	if id == "mouse_click" then
@@ -518,6 +517,7 @@ function InterFace.render()
 		end
 	elseif id == "timer" then
 		gRender("nop")
+		os.startTimer(1)
 	end
 end
 
@@ -538,6 +538,8 @@ local function launch()
 	if aExits == 0 then
 		NExit = false
 	end
+	
+	os.startTimer(1)
 	
 	while true do
 		local isExit = InterFace.render()
