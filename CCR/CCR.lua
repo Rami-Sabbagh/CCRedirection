@@ -4,7 +4,7 @@ shell.run("clear")
 term.setTextColor(colors.white)
 local homeD = "/CCR/"
 
-if not fs.exists(homeD.."CCR") then
+if not fs.exists(homeD.."Levels") then
 	error("Please Change homeD to the Game Path")
 end
 
