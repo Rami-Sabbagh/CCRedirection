@@ -4,6 +4,16 @@ shell.run("clear")
 term.setTextColor(colors.white)
 local homeD = "/CCR/"
 
+if not fs.exists(homeD.."CCR.lua") then
+	error("Please Change homeD to the Game Path")
+end
+
+if not fs.exists(homeD.."log") then
+	error("Log not in Path")
+else
+	os.loadAPI(homeD.."log")
+end
+
 if not fs.exists(homeD.."Logs/") then
 	fs.makeDir(homeD.."Logs/")
 end
@@ -16,6 +26,7 @@ local oScreen = {}
 local InterFace = {}
 local aExits = 0
 local fExit = "nop"
+local Tick = os.startTimer(1)
 
 InterFace.cBar = colors.orange
 InterFace.cExit = colors.red
@@ -326,6 +337,16 @@ local function drawMap()
 	log.add("Info","Drawing Map Done",logn)
 end
 
+local function isBrick(x,y)
+	local brb = tostring(oScreen[x][y].robot)
+	local bobj = oScreen[x][y]
+	if (brb == "zz" or brb == "nil") and not bobj.wall == true then
+		return false
+	else
+		return true
+	end
+end
+
 local function gRender(bFirst)
 	drawMap()
 	if bFirst == "start" then
@@ -363,118 +384,97 @@ local function gRender(bFirst)
 						log.add("Exit","Robot on Exit",logn)
 						end
 					elseif sSide == "a" then
-						local obj = oScreen[x][y-1]
-						local rb = tostring(oScreen[x][y-1].robot)
+						local obj = isBrick(x,y-1)
 						tScreen[x][y].robot = "zz"
-						log.add("RB Colg",rb,logn)
-						if not(rb == "zz" or rb == "nil") then
-							addRobot(x,y,"c",Cr)
-							log.add("Rb Colg","Ok",logn)
-						elseif not obj.wall == true then
+						if not obj == true then
 							addRobot(x,y-1,sSide,Cr)
 						else
-							local obj2 = oScreen[x-1][y]
-							local obj3 = oScreen[x+1][y]
-							if not obj2.wall == true and not obj3.wall == true then
+							local obj2 = isBrick(x-1,y)
+							local obj3 = isBrick(x+1,y)
+							if not obj2 == true and not obj3 == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
-							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+							elseif obj == true and obj2 == true and obj3 == true then
 								addRobot(x,y,"c",Cr)
 							else
-								if obj3.wall == true then
+								if obj3 == true then
 									addRobot(x,y,"d",Cr)
-								elseif obj2.wall == true then
+								elseif obj2 == true then
 									addRobot(x,y,"b",Cr)
 								end
 							end
 						end
 					elseif sSide == "b" then
-						local obj = oScreen[x+1][y]
-						local rb = tostring(oScreen[x+1][y].robot)
+						local obj = isBrick(x+1,y)
 						tScreen[x][y].robot = "zz"
-						log.add("RB Colg",rb,logn)
-						if not(rb == "zz" or rb == "nil") then
-							addRobot(x,y,"d",Cr)
-							log.add("Rb Colg","Ok",logn)
-						elseif not obj.wall == true then
+						if not obj == true then
 							addRobot(x+1,y,sSide,Cr)
 						else
-							local obj2 = oScreen[x][y-1]
-							local obj3 = oScreen[x][y+1]
-							if not obj2.wall == true and not obj3.wall == true then
+							local obj2 = isBrick(x,y-1)
+							local obj3 = isBrick(x,y+1)
+							if not obj2 == true and not obj3 == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"a",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"c",Cr)
 								end
-							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+							elseif obj == true and obj2 == true and obj3 == true then
 								addRobot(x,y,"d",Cr)
 							else
-								if obj3.wall == true then
+								if obj3 == true then
 									addRobot(x,y,"a",Cr)
-								elseif obj2.wall == true then
+								elseif obj2 == true then
 									addRobot(x,y,"c",Cr)
 								end
 							end
 						end
 					elseif sSide == "c" then
-						local obj = oScreen[x][y+1]
-						local rb = tostring(oScreen[x][y+1].robot)
+						local obj = isBrick(x,y+1)
 						tScreen[x][y].robot = "zz"
-						log.add("RB Colg",rb,logn)
-						log.add("RB Colg",rb,logn)
-						if not(rb == "zz" or rb == "nil") then
-							addRobot(x,y,"a",Cr)
-							log.add("Rb Colg","Ok",logn)
-						elseif not obj.wall == true then
+						if not obj == true then
 							addRobot(x,y+1,sSide,Cr)
 						else
-							local obj2 = oScreen[x-1][y]
-							local obj3 = oScreen[x+1][y]
-							if not obj2.wall == true and not obj3.wall == true then
+							local obj2 = isBrick(x-1,y)
+							local obj3 = isBrick(x+1,y)
+							if not obj2 == true and not obj3 == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"d",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"b",Cr)
 								end
-							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+							elseif obj == true and obj2 == true and obj3 == true then
 								addRobot(x,y,"a",Cr)
 							else
-								if obj3.wall == true then
+								if obj3 == true then
 									addRobot(x,y,"d",Cr)
-								elseif obj2.wall == true then
+								elseif obj2 == true then
 									addRobot(x,y,"b",Cr)
 								end
 							end
 						end
 					elseif sSide == "d" then
-						local obj = oScreen[x-1][y]
-						local rb = tostring(oScreen[x-1][y].robot)
+						local obj = isBrick(x-1,y)
 						tScreen[x][y].robot = "zz"
-						log.add("RB Colg",rb,logn)
-						if not(rb == "zz" or rb == "nil") then
-							addRobot(x,y,"b",Cr)
-							log.add("Rb Colg","Ok",logn)
-						elseif not obj.wall == true then
+						if not obj == true then
 							addRobot(x-1,y,sSide,Cr)
 						else
-							local obj2 = oScreen[x][y-1]
-							local obj3 = oScreen[x][y+1]
-							if not obj2.wall == true and not obj3.wall == true then
+							local obj2 = isBrick(x,y-1)
+							local obj3 = isBrick(x,y+1)
+							if not obj2 == true and not obj3 == true then
 								if Cr == "a" or Cr == "c" then
 									addRobot(x,y,"c",Cr)
 								elseif Cr == "b" or Cr == "d" then
 									addRobot(x,y,"a",Cr)
 								end
-							elseif obj.wall == true and obj2.wall == true and obj3.wall == true then
+							elseif obj == true and obj2 == true and obj3 == true then
 								addRobot(x,y,"b",Cr)
 							else
-								if obj3.wall == true then
+								if obj3 == true then
 									addRobot(x,y,"a",Cr)
-								elseif obj2.wall == true then
+								elseif obj2 == true then
 									addRobot(x,y,"c",Cr)
 								end
 							end
@@ -515,9 +515,9 @@ function InterFace.render()
 				drawMap()
 			end
 		end
-	elseif id == "timer" then
+	elseif id == "timer" and p1 == Tick then
 		gRender("nop")
-		os.startTimer(1)
+		Tick = os.startTimer(1)
 	end
 end
 
@@ -539,8 +539,6 @@ local function launch()
 		NExit = false
 	end
 	
-	os.startTimer(1)
-	
 	while true do
 		local isExit = InterFace.render()
 		if isExit == "end" or fExit == "yes" then
@@ -551,11 +549,14 @@ local function launch()
 		end
 	end
 	log.add("Info","End Of Game",logn)
+	os.unloadAPI("log")
+	shell.run("clear")
 end
 
 --Error Handelling--
 isErr,err = pcall(launch)
 if not isErr then
+	shell.run("clear")
 	if logn == nil then
 		local homeD = "/CCR/"
 		local logn = homeD.."Logs/" .. log.bestname("Log","/CCR/Logs/")
@@ -566,4 +567,5 @@ if not isErr then
 	end
 	print("Error, Send ("..logn..") to RamiLego")
 	print("The error is : "..err)
+	os.unloadAPI("log")
 end
