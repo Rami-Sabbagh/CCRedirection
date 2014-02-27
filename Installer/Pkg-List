@@ -1,5 +1,5 @@
-mkdir /CCR
-cddir /CCR
+mkdir CCR
+cddir CCR
 filen CCR
 https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/CCR.lua
 filen log
