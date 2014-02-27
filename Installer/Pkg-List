@@ -1,1 +1,23 @@
---Under Codding--
+mkdir /CCR
+cddir /CCR
+filen CCR
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/CCR.lua
+filen log
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/log
+mkdir Levels
+cddir Levels
+filen Level#0
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%230
+filen Level#1
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%231
+filen Level#2
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%232
+filen Level#3
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%233
+filen Level#4
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%234
+filen Level#5
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%235
+filen Level#6
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%236
+endof
