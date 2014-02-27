@@ -3,6 +3,11 @@ CCRedirection
 
 Dan200 Redirection Game on ComputerCraft
 
+Installer
+=========
+
+You can download the Installer Typing "pastebin get 4FwbMjUr CCRIns"
+
 To-Do List
 ==========
 - Make tScreen Size the Same Size Of The Level
