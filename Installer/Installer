@@ -1,1 +1,38 @@
---Still Under Codding--
+--Git Installer By : RamiLego--
+--Vars--
+if not http then
+	error("Please Enable HTTP")
+end
+
+local git = {}
+git.Link = "https://raw.github.com/RamiLego4Game/CCRedirection/master/Installer/Pkg-List"
+git.wDir = ""
+git.Line = 0
+
+--Functions--
+function git.action(nAction)
+	local comd = string.sub(nAction,1,5)
+	if comd == "mkdir" then
+		local data = string.sub(nAction,7,-1)
+		if not fs.exists(git.wDir..data) then
+			fs.makeDir(git.wDir.."/"..data)
+			--print(git.wDir.."/"..data)
+		end
+	elseif comd == "cddir" then
+		local data = string.sub(nAction,7,-1)
+		if fs.exists(git.wDir..data) and fs.isDir(git.wDir..data) then
+			git.wDir = git.wDir..data
+			--print(git.wDir)
+		end
+	elseif comd == "filen" then
+		local gitF = fs.open
+		local gitH = http.get(nAction)
+	elseif comd == "endof" then
+		return "Done"
+	end
+end
+--Launcher--
+git.action("mkdir /CCR")
+git.action("cddir /CCR")
+git.action("mkdir /Levels")
+git.action("cddir /Levels")
