@@ -1,8 +1,4 @@
 --LogAPI by : RamiLego--
---Doc--
-
---Vars--
-
 --Functions--
 function add(sElevel,sInfo,sDir)
 	if sElevel == nil or sInfo == nil or sDir == nil then return error("No Full Info For Log") end
@@ -19,11 +15,3 @@ function bestname( sName , sDir )
 	nF = #files
 	return sName.."#"..tostring(nF)
 end
-
---Loading--
-if term.isColor() then
-	term.setTextColor(colors.green)
-end
-print("LogAPI by RamiLego Loaded")
---Test--
---add("Info","Just Test","/LogTest")
