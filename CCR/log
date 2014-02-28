@@ -3,7 +3,7 @@
 function add(sElevel,sInfo,sDir)
 	if sElevel == nil or sInfo == nil or sDir == nil then return error("No Full Info For Log") end
 	local nTime = os.time()
-	log = fs.open(sDir,"a")
+	log = fs.open(sDir,fs.exists(sDir) and "a" or "w")--Log Fix,Thanks For "Bomb Bloke"
 	log.writeLine("["..nTime.."  "..sElevel.."]: "..sInfo)
 	log.flush()
 	log.close()
