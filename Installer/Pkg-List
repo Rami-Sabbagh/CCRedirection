@@ -5,6 +5,7 @@ https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/CCR.lua
 filen log
 https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/log
 mkdir Levels
+mkdir Logs
 cddir Levels
 filen Level#0
 https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/Levels/Level%230
