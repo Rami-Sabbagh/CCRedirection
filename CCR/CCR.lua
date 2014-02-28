@@ -26,10 +26,16 @@ local oScreen = {}
 local InterFace = {}
 local aExits = 0
 local fExit = "nop"
-local Tick = os.startTimer(1)
+local nSpeed = 1
+local Speed = nSpeed
+local fSpeed = 0.25
+local fSpeedS = false
+local Tick = os.startTimer(Speed)
 
 InterFace.cBar = colors.orange
 InterFace.cExit = colors.red
+InterFace.cSpeedD = colors.lightGray
+InterFace.cSpeedA = colors.red
 InterFace.cBarText = colors.gray
 
 local cG = colors.lightGray
@@ -492,8 +498,15 @@ function InterFace.drawBar()
 	term.setTextColor(InterFace.cBarText)
 	paintutils.drawLine( 1, 1, TermW-1, 1, InterFace.cBar)
 	printCentred( 1, "CCRedirection" )
+	term.setCursorPos(TermW-1,1)
+	if fSpeedS then
+		term.setBackgroundColor(InterFace.cSpeedA)
+	else
+		term.setBackgroundColor(InterFace.cSpeedD)
+	end
+	write(">")
+
 	term.setBackgroundColor(InterFace.cExit)
-	term.setCursorPos(TermW,1)
 	write("X")
 	term.setBackgroundColor(colors.black)
 end
@@ -505,9 +518,20 @@ function InterFace.render()
 		if p3 == 1 then
 			if p2 == TermW then
 				return "end"
+			elseif p2 == TermW-1 then
+				if fSpeedS then
+					fSpeedS = not fSpeedS
+					Speed = nSpeed
+					Tick = os.startTimer(Speed)
+					InterFace.drawBar()
+				else
+					fSpeedS = not fSpeedS
+					Speed = fSpeed
+					Tick = os.startTimer(Speed)
+					InterFace.drawBar()
+				end
 			end
 		else
-			--local eobj = tScreen[p2][p3]
 			local eobj = tScreen[p2][p3-1]
 			local erobj = tostring(tScreen[p2][p3-1].robot)
 			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true then
@@ -517,7 +541,7 @@ function InterFace.render()
 		end
 	elseif id == "timer" and p1 == Tick then
 		gRender("nop")
-		Tick = os.startTimer(1)
+		Tick = os.startTimer(Speed)
 	end
 end
 
