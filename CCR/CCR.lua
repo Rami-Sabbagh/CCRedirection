@@ -31,6 +31,7 @@ local Speed = nSpeed
 local fSpeed = 0.25
 local fSpeedS = false
 local Tick = os.startTimer(Speed)
+local Blocks = 0
 
 InterFace.cBar = colors.orange
 InterFace.cExit = colors.red
@@ -169,6 +170,7 @@ local function loadLevel(nNum)
 	local Line = 0
 	local wl = true
 	local Lines = 1
+	Blocks = tonumber(fLevel.readLine())
 	local xSize = string.len(fLevel.readLine())
 	while wl do
 		local wLine = fLevel.readLine()
@@ -183,6 +185,7 @@ local function loadLevel(nNum)
 	if ((Lines + 1) > TermH) or (xSize > TermW) then return error("Level#"..tostring(nNum).." Don't Fit Screen") end
 	log.add("Info","Level#"..tostring(nNum).." Lines = "..tostring(Lines),logn)
 	fLevel = fs.open(sLevelD,"r")
+	fLevel.readLine()
 	for Line=1,Lines do
 		sLine = fLevel.readLine()
 		local chars = string.len(sLine)
@@ -498,6 +501,11 @@ function InterFace.drawBar()
 	term.setTextColor(InterFace.cBarText)
 	paintutils.drawLine( 1, 1, TermW-1, 1, InterFace.cBar)
 	printCentred( 1, "CCRedirection" )
+	
+	term.setCursorPos(1,1)
+	term.setBackgroundColor(cG)
+	write(tostring(Blocks))
+	
 	term.setCursorPos(TermW-1,1)
 	if fSpeedS then
 		term.setBackgroundColor(InterFace.cSpeedA)
@@ -534,8 +542,10 @@ function InterFace.render()
 		else
 			local eobj = tScreen[p2][p3-1]
 			local erobj = tostring(tScreen[p2][p3-1].robot)
-			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true then
+			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true and Blocks > 0 then
 				addWall(p2,p3-1)
+				Blocks = Blocks-1
+				InterFace.drawBar()
 				drawMap()
 			end
 		end
