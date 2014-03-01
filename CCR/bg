@@ -1,0 +1,28 @@
+--CCR Background By : RamiLego--
+local cStar,cStarG,crStar,crStarB = colors.white,colors.yellow,".","+"
+local DStar,BStar,nStar,gStar = 14,10,16,3
+local TermW,TermH = term.getSize()
+
+shell.run("clear")
+for x=1,TermW do
+	for y=1,TermH do
+		local StarT = math.random(1,30)
+		if StarT == DStar then
+			term.setCursorPos(x,y)
+			term.setTextColor(cStar)
+			write(crStar)
+		elseif StarT == BStar then
+			term.setCursorPos(x,y)
+			term.setTextColor(cStar)
+			write(crStarB)
+		elseif StarT == nStar then
+			term.setCursorPos(x,y)
+			term.setTextColor(cStarG)
+			write(crStar)
+		elseif StarT == gStar then
+			term.setCursorPos(x,y)
+			term.setTextColor(cStarG)
+			write(crStarB)
+		end
+	end
+end
