@@ -1,8 +1,8 @@
 --CCRedirection by : RamiLego4Game--
 --Vars--
-shell.run("clear")
-term.setTextColor(colors.white)
 local homeD = "/CCR/"
+shell.run(homeD.."bg")
+term.setTextColor(colors.white)
 
 if not fs.exists(homeD.."Levels") then
 	error("Please Change homeD to the Game Path")
@@ -563,14 +563,9 @@ function InterFace.render()
 	end
 end
 
-log.add("Info","Functions Section Done",logn)
---Launcher--
-local function launch()
-	if #tArgs > 0 then
-		loadLevel(tArgs[1])
-	else
-		loadLevel(0)
-	end
+local function startG(LevelN)
+	shell.run(homeD.."bg")
+	loadLevel(LevelN)
 	local create = true
 	drawMap()
 	InterFace.drawBar()
@@ -589,6 +584,16 @@ local function launch()
 		if aExits == 0 and NExit == true then
 			fExit = "yes"
 		end
+	end
+end
+
+log.add("Info","Functions Section Done",logn)
+--Launcher--
+local function launch()
+	if #tArgs > 0 then
+		startG(tArgs[1])
+	else
+		startG(0)
 	end
 	log.add("Info","End Of Game",logn)
 	os.unloadAPI("log")
