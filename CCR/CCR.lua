@@ -33,6 +33,7 @@ local fSpeed = 0.25
 local fSpeedS = false
 local Tick = os.startTimer(Speed)
 local Blocks = 0
+local XOrgin,YOrgin = 1,1
 
 InterFace.cBar = colors.orange
 InterFace.cExit = colors.red
@@ -56,6 +57,11 @@ local function printCentred( yc, stg )
 	local xc = math.floor((TermW - string.len(stg)) / 2)
 	term.setCursorPos(xc,yc)
 	term.write( stg )
+end
+
+local function centerOrgin()
+	XOrgin = math.floor((TermW/2)-(SizeW/2))
+	YOrgin = math.floor((TermH/2)-(SizeH/2))
 end
 
 local function reMap()
@@ -252,10 +258,10 @@ local function drawMap()
 		  
 			local obj = tScreen[x][y]
 			if obj.ground == true then
-				paintutils.drawPixel(x,y+1,cG)
+				paintutils.drawPixel(XOrgin+x,YOrgin+y+1,cG)
 			end
 			if obj.wall == true then
-				paintutils.drawPixel(x,y+1,cW)
+				paintutils.drawPixel(XOrgin+x,YOrgin+y+1,cW)
 			end
 		 
 		 local ex = tostring(tScreen[x][y].exit)
@@ -273,7 +279,7 @@ local function drawMap()
 				end
 				term.setBackgroundColor(cG)
 				term.setTextColor(ex)
-				term.setCursorPos(x,y+1)
+				term.setCursorPos(XOrgin+x,YOrgin+y+1)
 				print("X")
 			end
 		 
@@ -295,7 +301,7 @@ local function drawMap()
 			
 				term.setTextColor(Cr)
 			term.setBackgroundColor(cG)
-				term.setCursorPos(x,y+1)
+				term.setCursorPos(XOrgin+x,YOrgin+y+1)
 			
 				sSide = string.sub(st,1,1)
 				if sSide == "a" then
@@ -312,7 +318,7 @@ local function drawMap()
 			end
 			
 			if obj.space == true then
-				paintutils.drawPixel(x,y+1,cS)
+				paintutils.drawPixel(XOrgin+x,YOrgin+y+1,cS)
 			end
 			
 			local rb = tostring(tScreen[x][y].robot)
@@ -331,7 +337,7 @@ local function drawMap()
 				end
 				term.setBackgroundColor(Cr)
 				term.setTextColor(colors.white)
-				term.setCursorPos(x,y+1)
+				term.setCursorPos(XOrgin+x,YOrgin+y+1)
 				sSide = string.sub(rb,1,1)
 				if sSide == "a" then
 					print("^")
@@ -544,12 +550,12 @@ function InterFace.render()
 				end
 			end
 		else
-			if p3-1 < SizeH+1 then
-				if p2 < SizeW+1 then
-					local eobj = tScreen[p2][p3-1]
-					local erobj = tostring(tScreen[p2][p3-1].robot)
+			if p3-1 < YOrgin+SizeH+1 and p3-1 > YOrgin then
+				if p2 < XOrgin+SizeW+1 and p2 > XOrgin then
+					local eobj = tScreen[p2-XOrgin][p3-YOrgin-1]
+					local erobj = tostring(tScreen[p2-XOrgin][p3-YOrgin-1].robot)
 					if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true and Blocks > 0 then
-						addWall(p2,p3-1)
+						addWall(p2-XOrgin,p3-YOrgin-1)
 						Blocks = Blocks-1
 						InterFace.drawBar()
 						drawMap()
@@ -566,6 +572,7 @@ end
 local function startG(LevelN)
 	shell.run(homeD.."bg")
 	loadLevel(LevelN)
+	centerOrgin()
 	local create = true
 	drawMap()
 	InterFace.drawBar()
@@ -610,18 +617,16 @@ if not isErr then
 	term.setTextColor(colors.white)
 	term.setBackgroundColor(colors.black)
 	term.clear()
-	if not err == "Terminated" then
-		if logn == nil or homeD == nil then
-			local homeD = "/CCR/"
-			local logn = homeD.."Logs/" .. log.bestname("Log","/CCR/Logs/")
-		end
-		
-		log.add("Error",err,logn)
-		if term.isColor() then
-			term.setTextColor(colors.red)
-		end
-		print("Error, Send ("..logn..") to RamiLego")
-		print("The error is : "..err)
+	if logn == nil or homeD == nil then
+		local homeD = "/CCR/"
+		local logn = homeD.."Logs/" .. log.bestname("Log","/CCR/Logs/")
 	end
+	
+	log.add("Error",err,logn)
+	if term.isColor() then
+		term.setTextColor(colors.red)
+	end
+	print("Error, Send ("..logn..") to RamiLego")
+	print("The error is : "..err)
 	os.unloadAPI("log")
 end
