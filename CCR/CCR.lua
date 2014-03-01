@@ -23,6 +23,7 @@ local TermW,TermH = term.getSize()
 
 local tScreen = {}
 local oScreen = {}
+local SizeW,SizeH = TermW,TermH
 local InterFace = {}
 local aExits = 0
 local fExit = "nop"
@@ -54,7 +55,6 @@ log.add("Info","Vars Section Done",logn)
 local function printCentred( yc, stg )
 	local xc = math.floor((TermW - string.len(stg)) / 2)
 	term.setCursorPos(xc,yc)
-	--term.clearLine()
 	term.write( stg )
 end
 
@@ -62,9 +62,9 @@ local function reMap()
 	log.add("Info","Screen Clearing Started",logn)
 	tScreen = nil
 	tScreen = {}
-	for x=1,TermW do
+	for x=1,SizeW do
 		tScreen[x] = {}
-		for y=1,TermH-1 do
+		for y=1,SizeH do
 			tScreen[x][y] = { space = true, wall = false, ground = false, robot = "zz", start = "zz", exit = "zz" }
 		end
 	end
@@ -83,9 +83,9 @@ local function buMap()
 	log.add("Info","Screen Backup Started",logn)
 	oScreen = nil
 	oScreen = {}
-	for x=1,TermW do
+	for x=1,SizeW do
 		oScreen[x] = {}
-		for y=1,TermH-1 do
+		for y=1,SizeH do
 			oScreen[x][y] = tablecopy(tScreen[x][y])
 		end
 	end
@@ -147,6 +147,9 @@ end
 
 local function addWall(x,y)
 	local obj = tScreen[x][y]
+	if obj == nil then
+		return error("Here X"..x.." Y"..y)
+	end
 	if obj.space == nil and obj.exit == nil and obj.ground == nil and obj.robot == nil and obj.start == nil then
 		tScreen[x][y].wall = true
 	else
@@ -165,7 +168,6 @@ local function loadLevel(nNum)
 	local sDir = homeD.."Levels/"
 	local sLevelD = sDir.."Level#"..tostring(nNum)
 	if not ( fs.exists(sLevelD) or fs.isDir(sLevelD) ) then return error("Level Not Exists : "..sLevelD) end
-	reMap()
 	fLevel = fs.open(sLevelD,"r")
 	local Line = 0
 	local wl = true
@@ -182,6 +184,8 @@ local function loadLevel(nNum)
 		end
 	end
 	log.add("Info","Level Size"..Lines.."/"..tostring(xSize),logn)
+	SizeW,SizeH = xSize,Lines
+	reMap()
 	if ((Lines + 1) > TermH) or (xSize > TermW) then return error("Level#"..tostring(nNum).." Don't Fit Screen") end
 	log.add("Info","Level#"..tostring(nNum).." Lines = "..tostring(Lines),logn)
 	fLevel = fs.open(sLevelD,"r")
@@ -243,8 +247,8 @@ end
 
 local function drawMap()
 	log.add("Info","Drawing Map",logn)
-	for x=1,TermW do
-		for y=1,TermH-1 do
+	for x=1,SizeW do
+		for y=1,SizeH do
 		  
 			local obj = tScreen[x][y]
 			if obj.ground == true then
@@ -360,8 +364,8 @@ local function gRender(bFirst)
 	drawMap()
 	if bFirst == "start" then
 		log.add("Info","Create Instate of Render",logn)
-		for x=1,TermW do
-			for y=1,TermH-1 do
+		for x=1,SizeW do
+			for y=1,SizeH do
 				local st = tostring(tScreen[x][y].start)
 				if not(st == "zz" or st == "nil") then
 					local Cr = string.sub(st,2,2)
@@ -373,8 +377,8 @@ local function gRender(bFirst)
 		log.add("Info","Create End",logn)
 	else
 		buMap()
-		for x=1,TermW do
-			for y=1,TermH-1 do
+		for x=1,SizeW do
+			for y=1,SizeH do
 				local rb = tostring(oScreen[x][y].robot)
 				if not(rb == "zz" or rb == "nil") then
 					local Cr = string.sub(rb,2,2)
@@ -540,13 +544,17 @@ function InterFace.render()
 				end
 			end
 		else
-			local eobj = tScreen[p2][p3-1]
-			local erobj = tostring(tScreen[p2][p3-1].robot)
-			if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true and Blocks > 0 then
-				addWall(p2,p3-1)
-				Blocks = Blocks-1
-				InterFace.drawBar()
-				drawMap()
+			if p3-1 < SizeH+1 then
+				if p2 < SizeW+1 then
+					local eobj = tScreen[p2][p3-1]
+					local erobj = tostring(tScreen[p2][p3-1].robot)
+					if (erobj == "zz" or erobj == "nil") and not eobj.wall == true and not eobj.space == true and Blocks > 0 then
+						addWall(p2,p3-1)
+						Blocks = Blocks-1
+						InterFace.drawBar()
+						drawMap()
+					end
+				end
 			end
 		end
 	elseif id == "timer" and p1 == Tick then
@@ -584,22 +592,31 @@ local function launch()
 	end
 	log.add("Info","End Of Game",logn)
 	os.unloadAPI("log")
-	shell.run("clear")
+	term.setCursorPos(1,1)
+	term.setTextColor(colors.white)
+	term.setBackgroundColor(colors.black)
+	term.clear()
 end
 
 --Error Handelling--
 isErr,err = pcall(launch)
 if not isErr then
-	shell.run("clear")
-	if logn == nil then
-		local homeD = "/CCR/"
-		local logn = homeD.."Logs/" .. log.bestname("Log","/CCR/Logs/")
+	term.setCursorPos(1,1)
+	term.setTextColor(colors.white)
+	term.setBackgroundColor(colors.black)
+	term.clear()
+	if not err == "Terminated" then
+		if logn == nil or homeD == nil then
+			local homeD = "/CCR/"
+			local logn = homeD.."Logs/" .. log.bestname("Log","/CCR/Logs/")
+		end
+		
+		log.add("Error",err,logn)
+		if term.isColor() then
+			term.setTextColor(colors.red)
+		end
+		print("Error, Send ("..logn..") to RamiLego")
+		print("The error is : "..err)
 	end
-	log.add("Error",err,logn)
-	if term.isColor() then
-		term.setTextColor(colors.red)
-	end
-	print("Error, Send ("..logn..") to RamiLego")
-	print("The error is : "..err)
 	os.unloadAPI("log")
 end
