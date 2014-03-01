@@ -2,6 +2,8 @@ mkdir CCR
 cddir CCR
 filen CCR
 https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/CCR.lua
+filen bg
+https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/bg
 filen log
 https://raw.github.com/RamiLego4Game/CCRedirection/master/CCR/log
 mkdir Levels
