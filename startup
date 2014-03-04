@@ -1,0 +1,2 @@
+local tArgs = { ... }
+shell.run("CCR/CCR.lua",tArgs)
