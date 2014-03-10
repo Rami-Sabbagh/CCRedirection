@@ -357,7 +357,7 @@ local function drawMap()
 end
 
 local function isBrick(x,y)
-	local brb = tostring(oScreen[x][y].robot)
+	local brb = tostring(tScreen[x][y].robot)
 	local bobj = oScreen[x][y]
 	if (brb == "zz" or brb == "nil") and not bobj.wall == true then
 		return false
