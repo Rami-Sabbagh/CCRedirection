@@ -1,5 +1,6 @@
 --CCRedirection by : RamiLego4Game--
 --Vars--
+shell.run("clear")
 local homeD = "/CCR/"
 shell.run(homeD.."bg")
 term.setTextColor(colors.white)
