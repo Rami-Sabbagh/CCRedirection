@@ -1,6 +1,10 @@
 --CCRedirection by : RamiLego4Game--
+--Clearing Screen--
+term.setBackgroundColor(colors.black)
+term.setTextColor(colors.white)
+term.clear()
+
 --Vars--
-shell.run("clear")
 local homeD = "/CCR/"
 shell.run(homeD.."bg")
 term.setTextColor(colors.white)
