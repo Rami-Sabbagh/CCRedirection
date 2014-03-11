@@ -248,6 +248,7 @@ local function loadLevel(nNum)
 			end
 		end
 	end
+	fLevel.close()
 	log.add("Info","Loading Level#"..tostring(nNum).." Done",logn)
 end
 
