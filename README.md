@@ -15,3 +15,4 @@ To-Do List
 - ~~Add Background~~ Added in Alpha 1.4A
 - Add Main Menu
 - Add Way To Disable Log
+- Add Support For CC1.6+
